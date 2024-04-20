@@ -1,0 +1,30 @@
+{
+  "name": "delivery-api",
+  "version": "1.0.0",
+  "description": "бэкенд-приложение, всеми основными функциями которого можно пользоваться.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -L ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/CyrilLaz/delivery-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CyrilLaz/delivery-api/issues"
+  },
+  "homepage": "https://github.com/CyrilLaz/delivery-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "mongoose": "^8.3.2",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
