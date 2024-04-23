@@ -1,7 +1,7 @@
 const { Schema, model, SchemaTypes } = require("mongoose");
 const { isEmail } = require("validator");
 const { compare, hash } = require("bcryptjs");
-const TypeError = require("../errors/TypeError");
+const TypesError = require("../errors/TypesError");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 const { noCorrectEmail, incorrectLoginData, incorrectTypeEmail } =
   require("../constants/messages").errors;
@@ -40,7 +40,7 @@ UserModuleScheme.statics = {
   async findByEmail(email) {
     try {
       if (!(typeof email === "string" || email instanceof String)) {
-        throw new TypeError(incorrectTypeEmail);
+        throw new TypesError(incorrectTypeEmail);
       }
       const user = await this.findOne({ email });
       return user;
