@@ -10,7 +10,7 @@ services:
     volumes:
       - ./:/app
     environment:
-      - MONGO_URL
+      - MONGO_URL=mongodb://mongodb/${MONGO_DB_NAME}
       - SESSION_SECRET
       - PORT
     command: npm run dev

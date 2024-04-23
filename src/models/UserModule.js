@@ -1,4 +1,4 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
 const { isEmail } = require("validator");
 const { compare, hash } = require("bcryptjs");
 const TypeError = require("../errors/TypeError");
@@ -6,33 +6,35 @@ const UnauthorizedError = require("../errors/UnauthorizedError");
 const { noCorrectEmail, incorrectLoginData, incorrectTypeEmail } =
   require("../constants/messages").errors;
 
-const UserModuleScheme = Schema({
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: {
-      validator(v) {
-        return isEmail(v);
+const UserModuleScheme = Schema(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: {
+        validator(v) {
+          return isEmail(v);
+        },
+        message: noCorrectEmail,
       },
-      message: noCorrectEmail,
     },
+    passwordHash: { type: String, required: true, select: false },
+    name: { type: String, required: true },
+    contactPhone: String,
   },
-  passwordHash: { type: String, required: true, select: false },
-  name: { type: String, required: true },
-  contactPhone: String,
-});
-
+  { versionKey: false }
+);
 UserModuleScheme.statics = {
   async create({ password, ...data }) {
     try {
       const passwordHash = await hash(password, 10);
       const newUser = new this({ ...data, passwordHash });
-      await newUser.save();
-      return newUser;
+      // await newUser.save();
+      return await newUser.save();
     } catch (error) {
       // TODO проверить срабатывание ошибки
-      return error;
+      throw error;
     }
   },
   async findByEmail(email) {
@@ -44,7 +46,7 @@ UserModuleScheme.statics = {
       return user;
     } catch (error) {
       // TODO проверить срабатывание ошибки
-      return error;
+      throw error;
     }
   },
   async findByCredentials(email, password) {
@@ -59,7 +61,7 @@ UserModuleScheme.statics = {
       }
     } catch (error) {
       // TODO проверить срабатывание ошибки
-      return error;
+      throw error;
     }
   },
 };
