@@ -5,7 +5,7 @@ module.exports.signUp = async (req, res, next) => {
   const { email, password, name, contactPhone } = req.body;
 
   try {
-    const {id} = await UserModule.create({
+    const { id } = await UserModule.create({
       email,
       password,
       name,
@@ -16,4 +16,9 @@ module.exports.signUp = async (req, res, next) => {
   } catch (error) {
     return next(error);
   }
+};
+
+module.exports.signIn = async (req, res, next) => {
+  const { id, email, contactPhone, name } = req.user;
+  res.send(respondForm.data({ id, email, contactPhone, name }));
 };

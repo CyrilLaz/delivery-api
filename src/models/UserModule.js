@@ -59,6 +59,7 @@ UserModuleScheme.statics = {
       if (!isCorrectPassword) {
         throw new UnauthorizedError(incorrectLoginData);
       }
+      return user;
     } catch (error) {
       // TODO проверить срабатывание ошибки
       throw error;

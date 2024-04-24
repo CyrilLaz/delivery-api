@@ -16,7 +16,7 @@ module.exports.errorHandler = (err, req, res, _) => {
   const { statusCode = defaultErrorStatus, message } = err;
   if (
     err instanceof NoExistError ||
-    // err instanceof UnauthorizedError ||
+    err instanceof UnauthorizedError ||
     //   || err instanceof NoRightError
     //   || err instanceof TooManyRequestError
     err instanceof TypesError
