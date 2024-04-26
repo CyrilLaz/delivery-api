@@ -9,10 +9,12 @@ services:
     working_dir: /app
     volumes:
       - ./:/app
+      - ./${UPLOAD_FOLDER}:/app/${UPLOAD_FOLDER}
     environment:
       - MONGO_URL=mongodb://mongodb/${MONGO_DB_NAME}
       - SESSION_SECRET
       - PORT
+      - UPLOAD_FOLDER
     command: npm run dev
     ports:
       - 3000:${PORT}

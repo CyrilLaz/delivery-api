@@ -14,6 +14,7 @@ const respondForms = require("../utils/respondForms");
 
 module.exports.errorHandler = (err, req, res, _) => {
   const { statusCode = defaultErrorStatus, message } = err;
+  console.log(err);
   if (
     err instanceof NoExistError ||
     err instanceof UnauthorizedError ||
@@ -34,7 +35,6 @@ module.exports.errorHandler = (err, req, res, _) => {
   if (err.code === 11000) {
     return res.status(nonUniqueStatus).send(respondForms.error(nonUniqueEmail));
   }
-  console.log(err);
   res
     .status(defaultErrorStatus)
     .send(respondForms.error("Что-то пошло не так"));

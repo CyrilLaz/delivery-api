@@ -1,4 +1,6 @@
+const { UPLOAD_FOLDER } = require("../constants/connect-config");
 const { UserModule } = require("../models/UserModule");
+const { createDirectory } = require("../utils/createDirectory");
 const respondForm = require("../utils/respondForms");
 
 module.exports.signUp = async (req, res, next) => {
@@ -11,7 +13,7 @@ module.exports.signUp = async (req, res, next) => {
       name,
       contactPhone,
     });
-
+    createDirectory(UPLOAD_FOLDER + "/" + id);
     res.send(respondForm.data({ id, name, email, contactPhone }));
   } catch (error) {
     return next(error);

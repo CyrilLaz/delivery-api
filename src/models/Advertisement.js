@@ -1,4 +1,4 @@
-const { Schema, SchemaTypes, model } = require("mongoose");
+const { Schema, SchemaTypes, model, Model, Document } = require("mongoose");
 
 const advertisementScheme = Schema(
   {
@@ -13,9 +13,10 @@ const advertisementScheme = Schema(
 );
 
 advertisementScheme.statics = {
-  async find(params) {
+  async search(params) {
     // TODO проверить условия поиска
     try {
+      // TODO убрать возвращение пустого масссива и переннести его в контроллеры
       const advertisements =
         (await this.find({ ...params, isDeleted: false })) ?? [];
       return advertisements;
@@ -26,7 +27,7 @@ advertisementScheme.statics = {
   async create(data) {
     try {
       const advertisement = new this(data);
-      return await advertisement.save().select("-_id").populate("userId");
+      return await advertisement.save();
     } catch (error) {
       throw error;
     }
