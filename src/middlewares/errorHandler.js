@@ -8,6 +8,7 @@ const {
 // const { dataErrorStatus } = require("../constants/statusCodes");
 // const DublicateError = require("../errors/DublicateError");
 const NoExistError = require("../errors/NoExistError");
+const NotEnoughRightError = require("../errors/NotEnoughRightError");
 const TypesError = require("../errors/TypesError");
 const UnauthorizedError = require("../errors/UnauthorizedError");
 const respondForms = require("../utils/respondForms");
@@ -18,7 +19,7 @@ module.exports.errorHandler = (err, req, res, _) => {
   if (
     err instanceof NoExistError ||
     err instanceof UnauthorizedError ||
-    //   || err instanceof NoRightError
+    err instanceof NotEnoughRightError ||
     //   || err instanceof TooManyRequestError
     err instanceof TypesError
   ) {

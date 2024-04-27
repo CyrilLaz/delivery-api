@@ -1,28 +1,51 @@
-const { Schema, SchemaTypes, model, Model, Document } = require("mongoose");
+const {
+  Schema,
+  SchemaTypes,
+  model,
+} = require("mongoose");
+const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
 
 const advertisementScheme = Schema(
   {
     shortText: String,
     description: String,
     images: [String],
-    userId: { type: SchemaTypes.ObjectId, ref: "UserModule", required: true },
+    userId: {
+      type: SchemaTypes.ObjectId,
+      ref: "UserModule",
+      required: true,
+    },
     tags: [String],
     isDeleted: { type: Boolean, default: false, select: false },
   },
-  { timestamps: true }
+  {
+    versionKey: false,
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
+advertisementScheme.query.forRespond = function () {
+  return this.populate("user").lean({ virtuals: true });
+};
+
+advertisementScheme.plugin(mongooseLeanVirtuals);
+advertisementScheme.virtual("user", {
+  ref: "UserModule",
+  localField: "userId",
+  foreignField: "_id",
+  justOne: true,
+  get: ({ _id, name }) => ({ id: _id, name }),
+});
+
 advertisementScheme.statics = {
-  async search(params) {
+  search(params) {
     // TODO проверить условия поиска
-    try {
-      // TODO убрать возвращение пустого масссива и переннести его в контроллеры
-      const advertisements =
-        (await this.find({ ...params, isDeleted: false })) ?? [];
-      return advertisements;
-    } catch (error) {
-      throw error;
-    }
+      return this.find({
+        ...params,
+        isDeleted: false,
+      });
   },
   async create(data) {
     try {
@@ -32,7 +55,7 @@ advertisementScheme.statics = {
       throw error;
     }
   },
-  async remove(id) {
+  async delete(id) {
     try {
       const advertisement = await this.findById(id);
       advertisement.isDeleted = true;
@@ -40,6 +63,11 @@ advertisementScheme.statics = {
     } catch (error) {
       throw error;
     }
+  },
+  async isOwnerOf(advId, userId) {
+    //TODO можно оптимизировать через  Query Helpers
+    const advertisement = await this.findById(advId);
+    return advertisement.userId.toString() === userId;
   },
 };
 

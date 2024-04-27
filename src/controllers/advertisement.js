@@ -4,12 +4,14 @@
 
 const { errors } = require("../constants/messages");
 const NoExistError = require("../errors/NoExistError");
+const NotEnoughRightError = require("../errors/NotEnoughRightError.js");
 const { Advertisement } = require("../models/Advertisement");
 const respondForms = require("../utils/respondForms");
+const { transformAdv } = require("../utils/transformAdv.js");
 
 module.exports.getAdvs = async (req, res, next) => {
   try {
-    const advs = await Advertisement.search();
+    const advs = (await Advertisement.search().forRespond()).map(transformAdv);
     res.send(respondForms.data(advs));
   } catch (error) {
     next(error);
@@ -19,9 +21,9 @@ module.exports.getAdvs = async (req, res, next) => {
 module.exports.getAdvById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const advs = await Advertisement.search({ id });
-    if (advs.length === 0) throw new NoExistError(errors.notFoundById);
-    res.send(respondForms.data(advs));
+    const adv = transformAdv((await Advertisement.search({ _id: id }).forRespond())[0]);
+    if (!adv) throw new NoExistError(errors.notFoundById);
+    res.send(respondForms.data(adv));
   } catch (error) {
     next(error);
   }
@@ -37,19 +39,30 @@ module.exports.createAdv = async (req, res, next) => {
   };
 
   try {
-    const { id, createdAt } = await Advertisement.create({
-      ...data,
-      userId: user.id,
-    });
-
-    res.send(
-      respondForms.data({
+    const adv = transformAdv(
+      await Advertisement.create({
         ...data,
-        id,
-        createdAt,
-        user: { id: user.id, name: user.name },
+        userId: user.id,
       })
     );
+
+    res.send(respondForms.data(adv));
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**@type TController */
+module.exports.deleteAdv = async (req, res, next) => {
+  const { id } = req.params,
+    { user } = req;
+  try {
+    if (!(await Advertisement.isOwnerOf(id, user.id))) {
+      throw new NotEnoughRightError(errors.notAuthorAdv);
+    }
+    await Advertisement.delete(id);
+
+    res.send(respondForms.data());
   } catch (error) {
     next(error);
   }

@@ -5,4 +5,5 @@ module.exports.errors = {
   nonUniqueEmail: "email занят",
   defaultErrorMessage: "Что-то пошло не так",
   notFoundById: "По требуемому id ничего не найдено",
+  notAuthorAdv:'Не является автором объявления'
 };
