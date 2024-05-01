@@ -1,8 +1,4 @@
-const {
-  Schema,
-  SchemaTypes,
-  model,
-} = require("mongoose");
+const { Schema, SchemaTypes, model } = require("mongoose");
 const mongooseLeanVirtuals = require("mongoose-lean-virtuals");
 
 const advertisementScheme = Schema(

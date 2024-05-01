@@ -3,10 +3,10 @@ const { UPLOAD_FOLDER } = require("../constants/connect-config");
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
-    // TODO: убрать хардкод
-    const userId = "662b49c1c74e32bc0f9d2491";
+    const userId = req.user.id;
     cb(null, UPLOAD_FOLDER + "/" + userId);
   },
+  // TODO : фикс ситуации с файлом с одним названием переписывает себя
   filename(req, file, cb) {
     cb(null, `${file.originalname}`);
   },

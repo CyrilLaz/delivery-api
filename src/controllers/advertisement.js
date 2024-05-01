@@ -21,7 +21,9 @@ module.exports.getAdvs = async (req, res, next) => {
 module.exports.getAdvById = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const adv = transformAdv((await Advertisement.search({ _id: id }).forRespond())[0]);
+    const adv = transformAdv(
+      (await Advertisement.search({ _id: id }).forRespond())[0]
+    );
     if (!adv) throw new NoExistError(errors.notFoundById);
     res.send(respondForms.data(adv));
   } catch (error) {
@@ -36,16 +38,15 @@ module.exports.createAdv = async (req, res, next) => {
   const data = {
     ...body,
     images: files.map((file) => "/" + file.path),
+    userId: user.id,
   };
 
   try {
+    const { _id } = await Advertisement.create(data);
+    
     const adv = transformAdv(
-      await Advertisement.create({
-        ...data,
-        userId: user.id,
-      })
+      (await Advertisement.search({ _id }).forRespond())[0]
     );
-
     res.send(respondForms.data(adv));
   } catch (error) {
     next(error);
