@@ -20,7 +20,6 @@ messageScheme.statics = {
     }
   },
 };
-const Message = model("Message", messageScheme);
 
 const chatScheme = Schema(
   {
@@ -31,7 +30,7 @@ const chatScheme = Schema(
       ],
       required: true,
     },
-    messages: { type: [Message], default: [] },
+    messages: { type: [messageScheme], default: [] },
   },
   { timestamps: { updatedAt: false } }
 );
@@ -48,9 +47,9 @@ chatScheme.statics = {
   },
   async sendMessage(data) {
     const { author, receiver, text } = data;
-    const message = new Message({ author, text });
+    const message = { author, text };
     try {
-      let chat = this.find([author, receiver]);
+      let chat = await this.find([author, receiver]);
       if (!chat) {
         chat = new this({ users: [author, receiver] });
       }
@@ -66,7 +65,6 @@ chatScheme.statics = {
   },
   async getHistory(id) {
     try {
-      // TODO проверить нало ли populate messages
       const chat = await this.findById(id);
       return chat.messages;
     } catch (error) {
@@ -77,4 +75,4 @@ chatScheme.statics = {
 
 const Chat = model("Chat", chatScheme);
 
-module.exports = { Chat, Message };
+module.exports = { Chat };
