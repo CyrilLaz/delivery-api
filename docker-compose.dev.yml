@@ -5,10 +5,10 @@ services:
     volumes:
       - ./data/db:/data/db
   server:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    image: node:20.10
+    working_dir: /app
     volumes:
+      - ./:/app
       - ./${UPLOAD_FOLDER}:/app/${UPLOAD_FOLDER}
     environment:
       - MONGO_URL
@@ -16,6 +16,7 @@ services:
       - PORT
       - UPLOAD_FOLDER
       - CORS_ORIGIN
+    command: npm run dev
     ports:
       - ${DOCKER_PORT}:${PORT}
     depends_on:
