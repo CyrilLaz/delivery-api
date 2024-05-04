@@ -43,11 +43,10 @@
 
 - `SESSION_SECRET= String` - строка для шифрования сессии пользователя.
 - `PORT= Number` - номер порта для запуска приложения. Default: 3000.
-- `UPLOAD_FOLDER= String` - название папки для загружаемых файлов. Default: data.
-- `MONGO_URL= String` - url для доступа к базе данных MongoDB. Default: mongodb://mongodb/delivery.
-- `CORS_ORIGIN= [String]` - массив url имеющих доступ к ресурсам приложения. Default: ["http://localhost:5500", "http://localhost:5501", "http://127.0.0.1:5500", "http://127.0.0.1:5501" ];
-
-- `DOCKER_PORT= Number` - номер порта для доступа к приложению в docker-контейнере.\
+- `UPLOAD_FOLDER= String` - название папки для загружаемых файлов. Default: `data`.
+- `MONGO_URL= String` - url для доступа к базе данных MongoDB. Default: `mongodb://mongodb/delivery`.
+- `CORS_ORIGIN= [String]` - массив url имеющих доступ к ресурсам приложения. Default: `["http://localhost:5500", "http://localhost:5501", "http://127.0.0.1:5500", "http://127.0.0.1:5501" ]`;
+- `DOCKER_PORT= Number` - номер порта для внешнего доступа к приложению из docker-контейнера.
 
 ---
 
