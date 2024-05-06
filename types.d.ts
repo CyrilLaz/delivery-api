@@ -12,3 +12,9 @@ export type TController = (
   next?: import("express").NextFunction
 ) => void;
 
+export type TSearchParams = {
+  shortText?: RegExp;
+  description?: RegExp;
+  userId?: string;
+  tags?: [String];
+};

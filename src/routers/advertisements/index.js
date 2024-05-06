@@ -3,6 +3,7 @@ const {
   getAdvById,
   createAdv,
   deleteAdv,
+  getAdvByParams,
 } = require("../../controllers/advertisement");
 const { upload } = require("../../middlewares/file");
 const { protectRoute } = require("../../middlewares/protectRoute");

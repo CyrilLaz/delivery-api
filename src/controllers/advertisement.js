@@ -30,6 +30,16 @@ module.exports.getAdvById = async (req, res, next) => {
     next(error);
   }
 };
+/**@type TController */
+module.exports.getAdvByParams = async (req, res, next) => {
+  const params = req.body;
+  try {
+    const result = await Advertisement.search(params);
+    res.send(respondForms.data(result));
+  } catch (error) {
+    next(error);
+  }
+};
 
 /**@type TController */
 module.exports.createAdv = async (req, res, next) => {
@@ -43,7 +53,7 @@ module.exports.createAdv = async (req, res, next) => {
 
   try {
     const { _id } = await Advertisement.create(data);
-    
+
     const adv = transformAdv(
       (await Advertisement.search({ _id }).forRespond())[0]
     );

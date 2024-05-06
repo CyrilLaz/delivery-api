@@ -36,12 +36,25 @@ advertisementScheme.virtual("user", {
 });
 
 advertisementScheme.statics = {
-  search(params) {
-    // TODO проверить условия поиска
-      return this.find({
-        ...params,
-        isDeleted: false,
-      });
+  search(params = {}) {
+    /**@type {import("../../types.js").TSearchParams} */
+    const { tags, userId, description, shortText } = params || {};
+    if (tags) {
+      params.tags = { $all: tags };
+    }
+    if (description) {
+      params.description = { $regex: description, $options: "i" };
+    }
+    if (shortText) {
+      params.shortText = { $regex: shortText, $options: "i" };
+    }
+    if (userId) {
+      params.userId = userId;
+    }
+    return this.find({
+      ...params,
+      isDeleted: false,
+    }).forRespond();
   },
   async create(data) {
     try {
